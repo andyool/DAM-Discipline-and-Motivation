@@ -9,6 +9,24 @@ A free, private, offline iPhone + Mac app for building discipline. You level up,
 
 DAM is a personal, from-scratch take on the "gamified discipline" style of app (think DAWG). It has the same dark, grainy, neon-hexagon look and the same core loop of daily tasks, XP, ranks and evolution. There's no subscription, no account and no social feed. Everything lives on your devices.
 
+<p align="center">
+  <img src="docs/screenshots/home.jpg" width="200" alt="Home">
+  <img src="docs/screenshots/progress.jpg" width="200" alt="Progress">
+  <img src="docs/screenshots/levelup.jpg" width="200" alt="Rank up">
+  <img src="docs/screenshots/program.jpg" width="200" alt="60-day program">
+</p>
+<p align="center">
+  <img src="docs/screenshots/challenges.jpg" width="200" alt="Challenges">
+  <img src="docs/screenshots/profile.jpg" width="200" alt="Profile">
+  <img src="docs/screenshots/ranks.jpg" width="200" alt="Ranks">
+  <img src="docs/screenshots/tools.jpg" width="200" alt="Tools">
+</p>
+<p align="center">
+  <img src="docs/screenshots/mac.jpg" width="820" alt="DAM on macOS">
+</p>
+
+<sub>Screenshots are captured automatically by CI from the iOS simulator and macOS (demo data, `-demoData YES`).</sub>
+
 ## What's inside
 
 **The core loop**
@@ -53,6 +71,8 @@ You need a Mac with **Xcode 26 or newer** (free on the Mac App Store) and a free
 **iPhone:** plug in your iPhone (or pair it over Wi-Fi), select it as the run destination and press **⌘R**.
 - First time: on the iPhone, enable **Settings → Privacy & Security → Developer Mode** and trust your developer certificate under **Settings → General → VPN & Device Management**.
 - With a *free* Apple ID, iOS apps expire after **7 days**. Just hit Run again from Xcode to refresh; your data is kept. A paid developer account ($99/yr) extends this to a year.
+
+**Test drive with sample data:** Product → Scheme → Edit Scheme → Run → Arguments and add `-demoData YES`. That gives you 38 days of fake history in a throwaway store; your real data is never touched. Remove the argument to go back to your own progress. Also available: `-tab progress`, `-screen ranks`, `-celebrate YES`.
 
 ### Syncing iPhone and Mac
 Settings → **Sync iPhone ↔ Mac** → *Choose sync folder…* and pick the same iCloud Drive folder (e.g. `iCloud Drive/DAM`) on both devices. DAM merges changes from both sides whenever the app opens or you make a change. No paid account or CloudKit needed.
