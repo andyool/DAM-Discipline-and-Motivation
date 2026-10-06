@@ -169,6 +169,19 @@ final class AppModel {
         seedDefaults()
     }
 
+    /// Loads sample history (in a throwaway store) for screenshots and test drives.
+    func loadDemo(celebrate: Bool = false) {
+        data = DemoData.make(today: Day.today())
+        seedDefaults()
+        recompute()
+        evaluateAchievements()
+        toasts = []
+        data.profile.maxCelebratedLevel = snap.level.level
+        if celebrate {
+            celebrations.append(.levelUp(level: snap.level.level, rank: snap.rank, form: formName, stage: snap.stage))
+        }
+    }
+
     var today: String { snap.today }
     var theme: EvolutionTheme { data.profile.theme }
     var formName: String { theme.forms[snap.stage] }

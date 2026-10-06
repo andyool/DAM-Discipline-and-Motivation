@@ -4,12 +4,12 @@ import Foundation
 
 enum Leveling {
     /// XP needed to go from `level` to `level + 1`. Early levels come fast, later ones take real consistency.
-    static func xpToAdvance(from level: Int) -> Int { 80 + 8 * level }
+    static func xpToAdvance(from level: Int) -> Int { 100 + 10 * level }
 
     /// Total XP required to reach `level`.
     static func totalXP(toReach level: Int) -> Int {
         let n = max(level - 1, 0)
-        return 80 * n + 4 * n * (n + 1)
+        return 100 * n + 5 * n * (n + 1)
     }
 
     struct State: Hashable {

@@ -97,6 +97,7 @@ struct CoachView: View {
             .padding(.vertical, 12)
             .background(Theme.bg.opacity(0.85))
         }
+        .background(AppBackground())
         .transparentNavBar()
         .onAppear { session.greet(model) }
     }

@@ -62,7 +62,7 @@ Settings → **Sync iPhone ↔ Mac** → *Choose sync folder…* and pick the sa
 | | |
 |---|---|
 | Task XP | Easy 10 · Medium 20 · Hard 35 · Savage 50, × streak multiplier (up to x1.5 at 30 days) |
-| Level curve | XP to next level = 80 + 8 × level. About level 10 after a week and a half, level 30 after the 60-day program, level 100 after about a year of consistency |
+| Level curve | XP to next level = 100 + 10 × level. Level 2 on day one, about level 10 after the first couple of weeks, level 30 around the end of the 60-day program, Legend (125) takes well over a year |
 | Stat rating | starting baseline (from onboarding) + up to 40 from lifetime stat XP + up to 25 from the last 14 days |
 | Streak shield | +1 per 7 secured days (max 2), auto-used on a missed day |
 | Arc conquest | check in on ≥ 90% of days → bonus XP = 6 × days |

@@ -35,7 +35,7 @@ struct RootView: View {
     @Environment(AppModel.self) private var model
     @Environment(SyncService.self) private var sync
     @Environment(\.scenePhase) private var scenePhase
-    @State private var tab: AppTab = .home
+    @State private var tab: AppTab = LaunchOptions.tab ?? .home
     @State private var didSetup = false
 
     var body: some View {
@@ -111,7 +111,7 @@ struct MainTabs: View {
             .navigationSplitViewColumnWidth(min: 190, ideal: 210)
         } detail: {
             NavigationStack {
-                TabScreen(tab: tab)
+                TabScreen(tab: tab, launchScreen: tab == LaunchOptions.tab ? LaunchOptions.screen : nil)
             }
             .id(tab)
         }
@@ -119,7 +119,7 @@ struct MainTabs: View {
         TabView(selection: $tab) {
             ForEach(AppTab.phoneTabs) { t in
                 NavigationStack {
-                    TabScreen(tab: t)
+                    TabScreen(tab: t, launchScreen: t == (LaunchOptions.tab ?? .home) ? LaunchOptions.screen : nil)
                 }
                 .tabItem { Label(t.title, systemImage: t.symbol) }
                 .tag(t)
@@ -131,6 +131,10 @@ struct MainTabs: View {
 
 struct TabScreen: View {
     let tab: AppTab
+    var launchScreen: String? = nil
+
+    @State private var showLaunchScreen = false
+    @State private var launched = false
 
     var body: some View {
         Group {
@@ -144,5 +148,15 @@ struct TabScreen: View {
             }
         }
         .background(AppBackground())
+        .navigationDestination(isPresented: $showLaunchScreen) {
+            LaunchScreenView(name: launchScreen ?? "")
+                .background(AppBackground())
+        }
+        .onAppear {
+            if launchScreen != nil && !launched {
+                launched = true
+                showLaunchScreen = true
+            }
+        }
     }
 }

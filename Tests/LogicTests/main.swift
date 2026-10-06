@@ -302,7 +302,25 @@ do {
     try? FileManager.default.removeItem(at: dir)
 }
 
-MainActor.assumeIsolated { modelTests() }
+@MainActor func demoTests() {
+    let dir = FileManager.default.temporaryDirectory.appendingPathComponent("dam-demo-\(UUID().uuidString)")
+    let model = AppModel(store: Store(directory: dir))
+    model.loadDemo(celebrate: true)
+    let s = model.snap
+    check(s.programDay == 38, "demo program day \(String(describing: s.programDay))")
+    check(s.streak > 3 && s.level.level > 10, "demo progress: streak \(s.streak) level \(s.level.level)")
+    check(model.toasts.isEmpty && model.celebrations.count == 1, "demo celebration only")
+    check(model.activeArcs.count == 1 && model.arcProgress(model.activeArcs[0]).checked == 11, "demo arc")
+    check(model.tasks(for: model.today).filter(\.done).count == 3, "demo today partially done")
+    print("Demo: level \(s.level.level) \(s.rank.name), form \(model.formName), OVR \(s.ovr), streak \(s.streak) (best \(s.bestStreak)), xp \(s.totalXP), unlocks \(model.data.unlocks.count)")
+    print("Demo ratings:", Stat.radarOrder.map { "\($0.name)=\(s.rating($0))" }.joined(separator: " "))
+    try? FileManager.default.removeItem(at: dir)
+}
+
+MainActor.assumeIsolated {
+    modelTests()
+    demoTests()
+}
 
 print(failures == 0 ? "ALL TESTS PASSED" : "\(failures) FAILURES")
 exit(failures == 0 ? 0 : 1)

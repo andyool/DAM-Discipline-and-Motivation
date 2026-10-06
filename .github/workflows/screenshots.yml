@@ -1,0 +1,125 @@
+name: Screenshots
+
+on:
+  push:
+    paths:
+      - "DAM/**"
+      - "DAM.xcodeproj/**"
+      - ".github/workflows/screenshots.yml"
+  workflow_dispatch:
+
+jobs:
+  screenshots:
+    runs-on: macos-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Select newest Xcode
+        run: |
+          XCODE=$(ls -d /Applications/Xcode*.app | grep -vi beta | sort -V | tail -1)
+          sudo xcode-select -s "$XCODE"
+          xcodebuild -version
+
+      - name: Build for simulator and Mac
+        run: |
+          xcodebuild -project DAM.xcodeproj -scheme DAM -configuration Debug -destination "generic/platform=iOS Simulator" \
+            -derivedDataPath dd CODE_SIGNING_ALLOWED=NO build -quiet
+          xcodebuild -project DAM.xcodeproj -scheme DAM -configuration Debug -destination "platform=macOS" \
+            -derivedDataPath dd CODE_SIGNING_ALLOWED=NO build -quiet
+          echo "--- iOS bundle resources ---"
+          ls dd/Build/Products/Debug-iphonesimulator/DAM.app | grep -E "wav|ttf|car|plist" | tr '\n' ' '
+          echo
+
+      - name: Capture iOS screenshots
+        run: |
+          APP=dd/Build/Products/Debug-iphonesimulator/DAM.app
+          BUNDLE=com.andyool.DAM
+          pick() {
+            xcrun simctl list devices available -j | python3 -c '
+          import json, sys
+          kind = sys.argv[1]
+          devs = json.load(sys.stdin)["devices"]
+          best = None
+          for runtime, items in devs.items():
+              if "iOS" not in runtime:
+                  continue
+              for d in items:
+                  n = d["name"]
+                  if kind == "iphone" and n.startswith("iPhone") and "Pro" in n and "Max" not in n:
+                      best = d["udid"]
+                  if kind == "ipad" and n.startswith("iPad Pro") and "13" in n:
+                      best = d["udid"]
+          print(best or "")
+          ' "$1"
+          }
+          IPHONE=$(pick iphone)
+          IPAD=$(pick ipad)
+          echo "iPhone: $IPHONE  iPad: $IPAD"
+          mkdir -p shots
+          for DEV in $IPHONE $IPAD; do
+            xcrun simctl boot "$DEV" || true
+            xcrun simctl bootstatus "$DEV" -b
+            xcrun simctl install "$DEV" "$APP"
+            xcrun simctl status_bar "$DEV" override --time 9:41 --batteryState charged --batteryLevel 100 --cellularBars 4 || true
+          done
+          shoot() {
+            DEV=$1; NAME=$2; shift 2
+            xcrun simctl terminate "$DEV" "$BUNDLE" >/dev/null 2>&1 || true
+            xcrun simctl launch "$DEV" "$BUNDLE" "$@" >/dev/null
+            sleep 8
+            xcrun simctl io "$DEV" screenshot --type=png "shots/$NAME.png" >/dev/null 2>&1
+            echo "shot $NAME"
+          }
+          shoot "$IPHONE" 01-onboarding
+          shoot "$IPHONE" 02-home -demoData YES -tab home
+          shoot "$IPHONE" 03-progress -demoData YES -tab progress
+          shoot "$IPHONE" 04-challenges -demoData YES -tab challenges
+          shoot "$IPHONE" 05-tools -demoData YES -tab tools
+          shoot "$IPHONE" 06-profile -demoData YES -tab profile
+          shoot "$IPHONE" 07-levelup -demoData YES -celebrate YES
+          shoot "$IPHONE" 08-program -demoData YES -tab home -screen program
+          shoot "$IPHONE" 09-ranks -demoData YES -tab profile -screen ranks
+          shoot "$IPHONE" 10-evolution -demoData YES -tab profile -screen evolution
+          shoot "$IPHONE" 11-achievements -demoData YES -tab profile -screen achievements
+          shoot "$IPHONE" 12-focus -demoData YES -tab tools -screen focus
+          shoot "$IPHONE" 13-breathe -demoData YES -tab tools -screen breathe
+          shoot "$IPHONE" 14-lift -demoData YES -tab tools -screen lift
+          shoot "$IPHONE" 15-fuel -demoData YES -tab tools -screen fuel
+          shoot "$IPHONE" 16-coach -demoData YES -tab tools -screen coach
+          shoot "$IPHONE" 17-journal -demoData YES -tab tools -screen journal
+          shoot "$IPHONE" 18-stat -demoData YES -tab progress -screen stat
+          shoot "$IPHONE" 19-settings -demoData YES -tab profile -screen settings
+          shoot "$IPAD" 30-ipad-home -demoData YES -tab home
+          shoot "$IPAD" 31-ipad-progress -demoData YES -tab progress
+          shoot "$IPAD" 32-ipad-challenges -demoData YES -tab challenges
+
+      - name: Capture macOS screenshots
+        continue-on-error: true
+        run: |
+          APP="$PWD/dd/Build/Products/Debug/DAM.app"
+          for TAB in home program; do
+            open -n "$APP" --args -demoData YES -tab $TAB
+            sleep 10
+            screencapture -x "shots/40-mac-$TAB.png" || true
+            pkill -x DAM || true
+            sleep 2
+            echo "shot mac $TAB"
+          done
+
+      - name: Make previews
+        run: |
+          mkdir -p previews
+          for f in shots/*.png; do
+            n=$(basename "$f" .png)
+            sips -s format jpeg -s formatOptions 70 -Z 900 "$f" --out "previews/$n.jpg" >/dev/null
+          done
+          ls -la previews
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: screenshots
+          path: |
+            shots
+            previews
+          retention-days: 14
