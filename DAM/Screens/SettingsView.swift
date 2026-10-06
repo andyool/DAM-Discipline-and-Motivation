@@ -37,6 +37,7 @@ struct SettingsView: View {
                     ForEach(StreakRule.allCases) { Text($0.name).tag($0) }
                 }
                 Toggle("Hardcore mode", isOn: binding(\.hardcore))
+                    .tint(Stat.physical.color)
             } header: {
                 Text("Rules")
             } footer: {
@@ -45,17 +46,21 @@ struct SettingsView: View {
 
             Section {
                 Toggle("Sounds", isOn: binding(\.soundOn))
+                    .tint(Stat.physical.color)
                 Toggle("Haptics", isOn: binding(\.hapticsOn))
+                    .tint(Stat.physical.color)
             } header: {
                 Text("Feedback")
             }
 
             Section {
                 Toggle("Morning lock-in", isOn: binding(\.morningReminder))
+                    .tint(Stat.physical.color)
                 if s.morningReminder {
                     DatePicker("Time", selection: minutesBinding(\.morningMinutes), displayedComponents: .hourAndMinute)
                 }
                 Toggle("Evening check-in", isOn: binding(\.eveningReminder))
+                    .tint(Stat.physical.color)
                 if s.eveningReminder {
                     DatePicker("Time", selection: minutesBinding(\.eveningMinutes), displayedComponents: .hourAndMinute)
                 }

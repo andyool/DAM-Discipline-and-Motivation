@@ -1,5 +1,5 @@
 import SwiftUI
-import AVFoundation
+@preconcurrency import AVFoundation
 
 /// The accountability mirror: look yourself in the eye and read your affirmations out loud.
 struct MirrorView: View {
@@ -79,6 +79,7 @@ struct MirrorView: View {
             HStack {
                 Toggle("Camera", isOn: $cameraOn)
                     .toggleStyle(.switch)
+                    .tint(Stat.physical.color)
                     .font(.ui(14))
                     .foregroundStyle(Theme.text2)
                     .fixedSize()

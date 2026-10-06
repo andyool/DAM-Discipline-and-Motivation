@@ -58,7 +58,7 @@ struct WorkoutsView: View {
                 .padding(.vertical, 8)
                 .padding(.horizontal, 2)
             }
-            .scrollIndicators(.hidden)
+            .scrollIndicators(.never)
 
             if !bests.isEmpty {
                 SectionHeader("Personal records")

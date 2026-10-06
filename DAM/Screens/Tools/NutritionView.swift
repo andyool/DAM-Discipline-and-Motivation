@@ -102,7 +102,7 @@ struct NutritionView: View {
                             }
                         }
                     }
-                    .scrollIndicators(.hidden)
+                    .scrollIndicators(.never)
                 }
             }
             .padding(16)

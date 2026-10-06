@@ -38,10 +38,10 @@ struct ProgramView: View {
                 MonoLabel("60-day program #\(program.number) · \(program.intensity.name)", color: Theme.text2)
             }
 
-            HexConstellation(size: 220, center: AnyView(
+            HexConstellation(size: 240, center: AnyView(
                 VStack(spacing: 0) {
                     Text(finished ? "Done" : "Day \(day)")
-                        .font(.system(size: 44, weight: .bold))
+                        .font(.system(size: 36, weight: .bold))
                         .foregroundStyle(.white)
                         .glow(radius: 12, opacity: 0.5)
                     MonoLabel(finished ? "Program complete" : "of \(program.length)", color: Theme.text2)
@@ -76,19 +76,23 @@ struct ProgramView: View {
                 .neonCard(Stat.ambition.color, active: true)
             }
 
-            ScrollView(.horizontal) {
-                HStack(spacing: 6) {
-                    ForEach(1...weeks, id: \.self) { w in
-                        PillTab(title: "Week \(w)", selected: w == selectedWeek) {
-                            week = w
-                            Feedback.tap()
+            ScrollViewReader { proxy in
+                ScrollView(.horizontal) {
+                    HStack(spacing: 6) {
+                        ForEach(1...weeks, id: \.self) { w in
+                            PillTab(title: "Week \(w)", selected: w == selectedWeek) {
+                                week = w
+                                Feedback.tap()
+                            }
+                            .id(w)
                         }
                     }
+                    .padding(.vertical, 6)
+                    .padding(.horizontal, 2)
                 }
-                .padding(.vertical, 6)
-                .padding(.horizontal, 2)
+                .scrollIndicators(.never)
+                .onAppear { proxy.scrollTo(selectedWeek, anchor: .center) }
             }
-            .scrollIndicators(.hidden)
 
             let weekStart = Day.add((selectedWeek - 1) * 7, to: program.startDay)
             let weekEnd = Day.add(min(selectedWeek * 7, program.length) - 1, to: program.startDay)
@@ -265,6 +269,7 @@ struct NewProgramSheet: View {
                         })) {
                             StatChip(stat: stat, selected: focus.contains(stat), compact: true)
                         }
+                        .tint(stat.color)
                     }
                 } header: {
                     Text("Focus areas (min 3)")

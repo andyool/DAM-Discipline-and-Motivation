@@ -308,7 +308,7 @@ struct OnboardingView: View {
                 }
                 .padding(.vertical, 6)
             }
-            .scrollIndicators(.hidden)
+            .scrollIndicators(.never)
             Button("Build my program", action: next)
                 .buttonStyle(NeonButtonStyle(color: .white, filled: true))
         }
@@ -415,7 +415,7 @@ private struct BuildProgramStep: View {
             }
             .padding(.horizontal, 24)
         }
-        .scrollIndicators(.hidden)
+        .scrollIndicators(.never)
     }
 }
 

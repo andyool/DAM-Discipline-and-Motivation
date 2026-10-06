@@ -35,7 +35,7 @@ struct CoachView: View {
                     .frame(maxWidth: Theme.maxContentWidth)
                     .frame(maxWidth: .infinity)
                 }
-                .scrollIndicators(.hidden)
+                .scrollIndicators(.never)
                 .scrollDismissesKeyboard(.interactively)
                 .onChange(of: session.messages.count) { _, _ in
                     if let id = session.messages.last?.id {
@@ -67,7 +67,7 @@ struct CoachView: View {
                     }
                     .padding(.horizontal, 20)
                 }
-                .scrollIndicators(.hidden)
+                .scrollIndicators(.never)
                 HStack(spacing: 10) {
                     TextField("", text: $input, prompt: Text("Talk to your coach…").foregroundStyle(Theme.text3), axis: .vertical)
                         .textFieldStyle(.plain)

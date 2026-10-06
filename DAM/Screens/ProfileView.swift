@@ -309,7 +309,7 @@ struct EvolutionView: View {
                 .padding(.vertical, 6)
                 .padding(.horizontal, 2)
             }
-            .scrollIndicators(.hidden)
+            .scrollIndicators(.never)
 
             ForEach(Array(theme.forms.enumerated()), id: \.offset) { i, form in
                 let unlocked = i <= snap.stage
@@ -357,7 +357,7 @@ struct ProgressCardSheet: View {
                     .clipShape(RoundedRectangle(cornerRadius: 28, style: .continuous))
                     .frame(maxWidth: .infinity)
             }
-            .scrollIndicators(.hidden)
+            .scrollIndicators(.never)
             if let rendered {
                 ShareLink(item: rendered, preview: SharePreview("My DAM progress", image: rendered)) {
                     Label("Share", systemImage: "square.and.arrow.up")

@@ -318,6 +318,7 @@ struct AchievementDef: Identifiable {
     func description(tier: Int) -> String {
         let t = thresholds[min(max(tier, 1), thresholds.count) - 1]
         return detail.replacingOccurrences(of: "{n}", with: String(t))
+            .replacingOccurrences(of: "{s}", with: t == 1 ? "" : "s")
     }
 }
 
@@ -328,7 +329,7 @@ enum Achievements {
         AchievementDef(key: "ironwill", name: "Iron Will", detail: "Reach a {n}-day streak", symbol: "flame.fill", stat: .discipline, thresholds: [7, 30, 100]) { $0.bestStreak },
         AchievementDef(key: "earlybird", name: "Early Bird", detail: "Complete {n} tasks before 8 AM", symbol: "sunrise.fill", stat: .discipline, thresholds: [5, 25, 100]) { $0.counters.earlyBird },
         AchievementDef(key: "centurion", name: "Centurion", detail: "Complete {n} tasks", symbol: "checkmark.seal.fill", stat: .discipline, thresholds: [100, 500, 2000]) { $0.counters.tasksCompleted },
-        AchievementDef(key: "perfectweek", name: "Perfect Week", detail: "Finish {n} perfect weeks", symbol: "star.fill", stat: .discipline, thresholds: [1, 4, 12]) { $0.counters.perfectWeeks },
+        AchievementDef(key: "perfectweek", name: "Perfect Week", detail: "Finish {n} perfect week{s}", symbol: "star.fill", stat: .discipline, thresholds: [1, 4, 12]) { $0.counters.perfectWeeks },
         AchievementDef(key: "beast", name: "Beast Mode", detail: "Complete {n} Physical activities", symbol: "figure.strengthtraining.traditional", stat: .physical, thresholds: [10, 50, 200]) { $0.counters.statActivities[.physical] ?? 0 },
         AchievementDef(key: "connector", name: "The Connector", detail: "Complete {n} Social activities", symbol: "person.2.fill", stat: .social, thresholds: [10, 50, 150]) { $0.counters.statActivities[.social] ?? 0 },
         AchievementDef(key: "zen", name: "Zen Mind", detail: "Complete {n} Mental activities", symbol: "brain.head.profile", stat: .mental, thresholds: [10, 50, 150]) { $0.counters.statActivities[.mental] ?? 0 },
@@ -336,13 +337,13 @@ enum Achievements {
         AchievementDef(key: "visionary", name: "Visionary", detail: "Complete {n} Ambition activities", symbol: "scope", stat: .ambition, thresholds: [10, 50, 150]) { $0.counters.statActivities[.ambition] ?? 0 },
         AchievementDef(key: "deepwork", name: "Deep Work", detail: "Lock in for {n} minutes total", symbol: "timer", stat: .ambition, thresholds: [120, 1000, 5000]) { $0.counters.focusMinutes },
         AchievementDef(key: "challenger", name: "Challenger", detail: "Complete {n} daily challenges", symbol: "bolt.fill", stat: .ambition, thresholds: [5, 25, 100]) { $0.counters.challenges },
-        AchievementDef(key: "arcs", name: "Arc Conqueror", detail: "Conquer {n} arcs", symbol: "mountain.2.fill", stat: .discipline, thresholds: [1, 3, 6]) { $0.counters.arcsConquered },
+        AchievementDef(key: "arcs", name: "Arc Conqueror", detail: "Conquer {n} arc{s}", symbol: "mountain.2.fill", stat: .discipline, thresholds: [1, 3, 6]) { $0.counters.arcsConquered },
         AchievementDef(key: "lifter", name: "Iron Lifter", detail: "Log {n} workouts", symbol: "dumbbell.fill", stat: .physical, thresholds: [5, 25, 100]) { $0.counters.workouts },
         AchievementDef(key: "fuel", name: "Fuel Master", detail: "Hit a nutrition goal on {n} days", symbol: "fork.knife", stat: .physical, thresholds: [7, 30, 100]) { $0.counters.nutritionDays },
         AchievementDef(key: "chronicler", name: "Chronicler", detail: "Write {n} journal entries", symbol: "book.closed.fill", stat: .mental, thresholds: [7, 30, 100]) { $0.counters.journalEntries },
         AchievementDef(key: "breath", name: "Breathwork", detail: "Complete {n} breathing sessions", symbol: "wind", stat: .mental, thresholds: [5, 25, 100]) { $0.counters.breathSessions },
         AchievementDef(key: "mirror", name: "The Mirror", detail: "Recite affirmations on {n} days", symbol: "person.crop.square", stat: .mental, thresholds: [3, 21, 60]) { $0.counters.affirmationDays },
-        AchievementDef(key: "graduate", name: "Graduate", detail: "Complete {n} 60-day programs", symbol: "graduationcap.fill", stat: .ambition, thresholds: [1, 2, 4]) { $0.counters.programsCompleted },
+        AchievementDef(key: "graduate", name: "Graduate", detail: "Complete {n} 60-day program{s}", symbol: "graduationcap.fill", stat: .ambition, thresholds: [1, 2, 4]) { $0.counters.programsCompleted },
         AchievementDef(key: "ascension", name: "Ascension", detail: "Reach level {n}", symbol: "crown.fill", stat: .ambition, thresholds: [10, 50, 100]) { $0.level.level },
     ]
 

@@ -24,9 +24,7 @@ struct ChallengesView: View {
                 ArcCard(run: run)
             }
 
-            SectionHeader(title: "Daily challenges (\(Day.short(today)))") {
-                MonoLabel("Resets at midnight", size: 10)
-            }
+            SectionHeader("Daily challenges (\(Day.short(today)))")
             ScrollView(.horizontal) {
                 HStack(spacing: 14) {
                     ForEach(Challenges.daily(for: today)) { c in
@@ -38,7 +36,7 @@ struct ChallengesView: View {
                 .padding(.horizontal, 4)
             }
             .scrollTargetBehavior(.viewAligned)
-            .scrollIndicators(.hidden)
+            .scrollIndicators(.never)
 
             SectionHeader("Start an arc")
             ForEach(templates) { t in

@@ -60,7 +60,8 @@ struct LevelUpView: View {
 
     var body: some View {
         ZStack {
-            Color.black.opacity(0.9).ignoresSafeArea()
+            Rectangle().fill(.ultraThinMaterial).ignoresSafeArea()
+            Color.black.opacity(0.88).ignoresSafeArea()
             LightRays(color: color)
                 .frame(width: 900, height: 900)
                 .opacity(show ? 1 : 0)
@@ -197,7 +198,8 @@ struct MomentView: View {
 
     var body: some View {
         ZStack {
-            Color.black.opacity(0.9).ignoresSafeArea()
+            Rectangle().fill(.ultraThinMaterial).ignoresSafeArea()
+            Color.black.opacity(0.88).ignoresSafeArea()
             LightRays(color: color).frame(width: 900, height: 900).opacity(show ? 0.8 : 0)
             HexConfetti().ignoresSafeArea()
             VStack(spacing: 14) {

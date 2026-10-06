@@ -91,6 +91,7 @@ struct HabitEditor: View {
 
                 Section {
                     Toggle("Remind me", isOn: $reminderOn)
+                    .tint(Stat.physical.color)
                     if reminderOn {
                         DatePicker("Time", selection: $reminderTime, displayedComponents: .hourAndMinute)
                     }

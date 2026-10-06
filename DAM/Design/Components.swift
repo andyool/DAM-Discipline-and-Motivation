@@ -318,7 +318,7 @@ struct ScreenScroll<Content: View>: View {
             .frame(maxWidth: Theme.maxContentWidth)
             .frame(maxWidth: .infinity)
         }
-        .scrollIndicators(.hidden)
+        .scrollIndicators(.never)
         .background(AppBackground())
     }
 }

@@ -57,7 +57,7 @@ struct FocusView: View {
                             }
                         }
                     }
-                    .scrollIndicators(.hidden)
+                    .scrollIndicators(.never)
                 }
 
                 TextField("", text: $focus.label, prompt: Text("What are you locking in on?").foregroundStyle(Theme.text3))
@@ -168,6 +168,7 @@ private struct FocusRing: View {
                         style: StrokeStyle(lineWidth: 14, lineCap: .round))
                 .rotationEffect(.degrees(-90))
                 .shadow(color: color.opacity(0.8), radius: 12)
+                .opacity(progress > 0.002 ? 1 : 0)
             TickRing(count: 60, length: 0.04)
                 .stroke(Color.white.opacity(0.12), lineWidth: 1)
                 .padding(26)
