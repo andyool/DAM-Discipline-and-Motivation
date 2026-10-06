@@ -1,0 +1,46 @@
+name: Build
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  logic-tests:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run game-logic tests
+        run: ./scripts/test-logic.sh
+
+  build:
+    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: [iOS, macOS]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Select newest Xcode
+        run: |
+          XCODE=$(ls -d /Applications/Xcode*.app | grep -vi beta | sort -V | tail -1)
+          sudo xcode-select -s "$XCODE"
+          xcodebuild -version
+      - name: Build ${{ matrix.platform }}
+        run: |
+          if [ "${{ matrix.platform }}" = "iOS" ]; then
+            DEST="generic/platform=iOS Simulator"
+          else
+            DEST="platform=macOS"
+          fi
+          set +e
+          xcodebuild -project DAM.xcodeproj -scheme DAM -configuration Debug -destination "$DEST" \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" build > build.log 2>&1
+          STATUS=$?
+          echo "=== warnings (first 60) ==="
+          grep -E "warning:" build.log | grep -v "appintentsmetadataprocessor" | sort -u | head -60
+          echo "=== errors ==="
+          grep -E "error:" build.log | sort -u | head -150
+          echo "=== tail ==="
+          tail -25 build.log
+          exit $STATUS
