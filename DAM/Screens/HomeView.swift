@@ -33,8 +33,8 @@ struct HomeView: View {
             }
             .padding(.top, 4)
 
-            if day == snap.today, let programDay = snap.programDay {
-                ProgramBanner(day: programDay, intensity: model.data.program?.intensity ?? .lockedIn)
+            if day == snap.today, let program = model.data.program {
+                ProgramBanner(day: program.ended ? program.length + 1 : (snap.programDay ?? 1), intensity: program.intensity)
             }
 
             if !editable {
